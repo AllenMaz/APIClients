@@ -8,9 +8,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNet.Http;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Serilog;
 
-namespace Implicit
+namespace AuthorizationCode
 {
     public class Startup
     {
@@ -45,6 +47,7 @@ namespace Implicit
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
             var logWarning = new Serilog.LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.RollingFile(
@@ -71,7 +74,7 @@ namespace Implicit
             app.UseApplicationInsightsExceptionTelemetry();
 
             app.UseStaticFiles();
-
+            
             #region IdentityServer
 
             app.UseCookieAuthentication(options =>
@@ -80,6 +83,7 @@ namespace Implicit
                 options.AutomaticAuthenticate = true;
 
             });
+            
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             app.UseOpenIdConnectAuthentication(options =>
@@ -88,13 +92,12 @@ namespace Implicit
                 options.SignInScheme = "cookies";
                 options.AutomaticChallenge = true;
 
-                options.Authority = Constants.Configuration.ASBaseAddress ;
+                options.Authority = Constants.Configuration.ASBaseAddress;
                 options.RequireHttpsMetadata = false;
+                
+                options.ClientId = "padmate_AuthorizationCode";
+                options.ResponseType = OpenIdConnectResponseTypes.Code;
 
-                options.UseTokenLifetime = true;
-
-                options.ClientId = "padmate_mvcimplicit";
-                options.ResponseType = "id_token token"; 
 
                 options.Scope.Add("profile");
                 options.Scope.Add("email");
@@ -104,6 +107,9 @@ namespace Implicit
                 options.TokenValidationParameters.NameClaimType = "name";
                 options.TokenValidationParameters.RoleClaimType = "role";
             });
+
+           
+
             #endregion
 
             app.UseMvc(routes =>

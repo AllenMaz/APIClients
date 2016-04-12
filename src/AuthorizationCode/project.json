@@ -1,4 +1,4 @@
-{
+﻿{
   "version": "1.0.0-*",
   "compilationOptions": {
     "emitEntryPoint": true
@@ -28,12 +28,11 @@
   },
 
   "commands": {
-    "web": "Microsoft.AspNet.Server.Kestrel"
+    "web": "Microsoft.AspNet.Server.Kestrel --server.urls=http://localhost:5000"
   },
 
   "frameworks": {
-    "dnx451": { },
-    "dnxcore50": { }
+    "dnx451": { }
   },
 
   "exclude": [
