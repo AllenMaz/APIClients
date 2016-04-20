@@ -18,6 +18,8 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Constants", "src\Constants\
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "AuthorizationCode", "src\AuthorizationCode\AuthorizationCode.xproj", "{E79A89EC-1210-4A88-A17B-A366E9BF20A6}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ResourceOwner-JavaScript", "src\ResourceOwner-JavaScript\ResourceOwner-JavaScript.xproj", "{97560939-C0A3-44F9-9631-81D85004776F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{E79A89EC-1210-4A88-A17B-A366E9BF20A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E79A89EC-1210-4A88-A17B-A366E9BF20A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E79A89EC-1210-4A88-A17B-A366E9BF20A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97560939-C0A3-44F9-9631-81D85004776F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97560939-C0A3-44F9-9631-81D85004776F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97560939-C0A3-44F9-9631-81D85004776F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97560939-C0A3-44F9-9631-81D85004776F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,5 +55,6 @@ Global
 		{C61795D1-670F-44B1-8C51-292E23BBCFF3} = {38115181-A4FF-4830-B64B-26816AE6FBA5}
 		{0522F002-BCBE-4068-8B51-19B83958E977} = {38115181-A4FF-4830-B64B-26816AE6FBA5}
 		{E79A89EC-1210-4A88-A17B-A366E9BF20A6} = {38115181-A4FF-4830-B64B-26816AE6FBA5}
+		{97560939-C0A3-44F9-9631-81D85004776F} = {38115181-A4FF-4830-B64B-26816AE6FBA5}
 	EndGlobalSection
 EndGlobal

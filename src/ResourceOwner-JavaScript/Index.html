@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8" />
+</head>
+<body>
+    <h1>JS-based resource owner sample</h1>
+    <div>
+        <label>BaseUrl</label>
+        <input id="baseurl" style="width:400px;" value="http://localhost:23194/" />
+    </div>
+    <div>
+        <label>UserName</label>
+        <input id="username" value="Admin" />
+    </div>
+    <div>
+        <label>Password</label>
+        <input id="password" value="admin123" />
+    </div>
+    <div>
+        <button id="button">Get Token</button>
+        <button id="callApi">Call Api</button>
+    </div>
+    <script>
+
+        var apiUrl = "http://dpcontrol.chinacloudsites.cn/v1/Customers";
+        var client_id = "padmate_resourceowner";
+        var client_secret = "padmate_resourceowner_secret";
+
+        document.getElementById("button").addEventListener("click", getToken, false);
+        document.getElementById("callApi").addEventListener("click", callApi, false);
+
+        function callApi(accessToken) {
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function (e) {
+                console.log(xhr.status);
+                console.log(xhr.response);
+
+            }
+            xhr.open("GET", apiUrl);
+            xhr.setRequestHeader("Authorization", "Bearer " + accessToken);
+            xhr.send(null);
+        }
+
+        function getToken() {
+            var baseUrl = document.getElementById("baseurl").value;
+            var tokenUrl = baseUrl + "connect/token";
+
+            var uid = document.getElementById("username").value;
+            var pwd = document.getElementById("password").value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function (e) {
+                console.log(xhr.status);
+                console.log(xhr.response);
+
+                var response_data = JSON.parse(xhr.response);
+                if (xhr.status === 200 && response_data.access_token) {
+                    callApi(response_data.access_token);
+                    //revokeToken(response_data.access_token);
+                }
+            }
+            xhr.open("POST", tokenUrl);
+            var data = {
+                username: uid,
+                password: pwd,
+                grant_type: "password",
+                scope: "dpcontrolapiscope",
+                //client_id: client_id,
+                //client_secret:client_secret
+            };
+            var body = "";
+            for (var key in data) {
+                if (body.length) {
+                    body += "&";
+                }
+                body += key + "=";
+                body += encodeURIComponent(data[key]);
+            }
+            xhr.setRequestHeader("Authorization", "Basic " + btoa(client_id + ":" + client_secret));
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send(body);
+        }
+
+        function revokeToken(token) {
+            var baseUrl = document.getElementById("baseurl").value;
+            var revokeUrl = baseUrl + "connect/revocation";
+
+            var xhr = new XMLHttpRequest();
+            xhr.onload = function (e) {
+                console.log(xhr.status);
+                console.log(xhr.response);
+            }
+            xhr.open("POST", revokeUrl);
+            var data = {
+                token: token,
+                //token_type_hint:"access_token",
+                //client_id: client_id,
+                //client_secret:client_secret
+            };
+            var body = "";
+            for (var key in data) {
+                if (body.length) {
+                    body += "&";
+                }
+                body += key + "=";
+                body += encodeURIComponent(data[key]);
+            }
+            xhr.setRequestHeader("Authorization", "Basic " + btoa(client_id + ":" + client_secret));
+            xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            xhr.send(body);
+        }
+    </script>
+</body>
+</html>

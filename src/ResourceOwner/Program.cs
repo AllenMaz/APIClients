@@ -14,24 +14,44 @@ namespace ResourceOwner
 {
     public class Program
     {
+        public static string token;
         public static void Main(string[] args)
         {
             var response = RequestToken();
             ShowResponse(response);
+            token = response.AccessToken;
 
-            CallService(response.AccessToken);
-            Console.ReadLine();
+            while (true)
+            {
+                var inputValue = Console.ReadLine();
+                if (inputValue =="") //Press Enter
+                {
+                    CallService(token);
+                    Console.ReadLine();
+                }
+            }
+
+           
         }
 
         static TokenResponse RequestToken()
         {
+            var clientId = "padmate_resourceowner";
+            var clientSecret = "padmate_resourceowner_secret";
+
+            var encoding = Encoding.UTF8;
+            var credentials = string.Format("{0}:{1}", clientId, clientSecret);
+
+            var headerValue = Convert.ToBase64String(encoding.GetBytes(credentials));
+
             var client = new TokenClient(
                 Configuration.TokenEndpoint,
                 "padmate_resourceowner",
                 "padmate_resourceowner_secret");
 
-
+            
             return client.RequestResourceOwnerPasswordAsync("Admin", "admin123", "dpcontrolapiscope").Result;
+            
         }
 
         static void CallService(string token)
@@ -45,10 +65,11 @@ namespace ResourceOwner
 
             client.SetBearerToken(token);
 
-            var response = Task.Run<string>(() => client.GetStringAsync(Configuration.CustomersAPI)).Result;
+            var response = Task.Run<string>(() => client.GetStringAsync(Configuration.CustomersAPI));
+                
 
             "\n\nService claims:".ConsoleGreen();
-            Console.WriteLine(response.ToString());
+            Console.WriteLine(response.Result.ToString());
         }
 
         private static void ShowResponse(TokenResponse response)

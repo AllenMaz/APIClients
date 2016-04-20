@@ -18,6 +18,11 @@ namespace Implicit.Controllers
         }
 
 
+        public IActionResult CallBack()
+        {
+            return Json("CallBack");
+        }
+
         [Authorize]
         public IActionResult Secure()
         {
@@ -43,6 +48,7 @@ namespace Implicit.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.Authentication.SignOutAsync("cookies");
+            await HttpContext.Authentication.SignOutAsync("oidc");
             return Redirect("~/");
         }
 

@@ -31,12 +31,12 @@ namespace AuthorizationCode.Controllers
                 var state = CryptoRandom.CreateRandomKeyString(64);
                 var nonce = CryptoRandom.CreateRandomKeyString(64);
 
-                var request = new AuthorizeRequest("http://localhost:11242/connect/authorize");
+                var request = new AuthorizeRequest(Configuration.AuthorizeEndpoint);
                 var url = request.CreateAuthorizeUrl(
                     clientId: "padmate_AuthorizationCode",
                     responseType: "code",
                     scope: "dpcontrolapiscope",
-                    redirectUri: "http://localhost:27898/Home/CallBack",
+                    redirectUri: Configuration.CodeCallBackUrl,
                     state: state,
                     nonce: nonce);
 
@@ -49,7 +49,7 @@ namespace AuthorizationCode.Controllers
                 "padmate_AuthorizationCode",
                 "padmate_authorizationcode_secret");
 
-                var response = await client.RequestAuthorizationCodeAsync(code, "http://localhost:27898/Home/CallBack");
+                var response = await client.RequestAuthorizationCodeAsync(code, Configuration.CodeCallBackUrl);
                 await this.CallApi(response.AccessToken);
             }
         }

@@ -94,8 +94,8 @@ namespace Implicit
                 options.UseTokenLifetime = true;
 
                 options.ClientId = "padmate_mvcimplicit";
-                options.ResponseType = "id_token token"; 
-
+                options.ResponseType = "id_token token";
+                options.CallbackPath = "/Home/CallBack"; //回调URL，OIDC默认的回调为signin-oidc
                 options.Scope.Add("profile");
                 options.Scope.Add("email");
                 options.Scope.Add("roles");
