@@ -7,10 +7,8 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.IdentityModel.Tokens.Jwt;
-using Serilog;
 
-namespace Implicit
+namespace Implicit.Swagger
 {
     public class Startup
     {
@@ -45,14 +43,6 @@ namespace Implicit
         {
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
-            var logWarning = new Serilog.LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .WriteTo.RollingFile(
-                pathFormat: env.MapPath("Error/Exception.log"),
-                outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level}] {Message}{NewLine}{Exception}{NewLine}{NewLine}"
-                ).CreateLogger();
-
-            loggerFactory.AddSerilog(logWarning);
 
             app.UseApplicationInsightsRequestTelemetry();
 
@@ -71,41 +61,6 @@ namespace Implicit
             app.UseApplicationInsightsExceptionTelemetry();
 
             app.UseStaticFiles();
-
-            #region IdentityServer
-
-            app.UseCookieAuthentication(options =>
-            {
-                options.AuthenticationScheme = "cookies";
-                options.AutomaticAuthenticate = true;
-                options.CookieName = "mvcclientcookies";
-
-            });
-
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-            app.UseOpenIdConnectAuthentication(options =>
-            {
-                options.AuthenticationScheme = "oidc";
-                options.SignInScheme = "cookies";
-                options.AutomaticChallenge = true;
-
-                options.Authority = Constants.Configuration.ASBaseAddress ;
-                options.RequireHttpsMetadata = false;
-
-                options.UseTokenLifetime = true;
-
-                options.ClientId = "padmate_mvcimplicit";
-                options.ResponseType = "id_token token";
-                options.CallbackPath = "/Home/CallBack"; //回调URL，OIDC默认的回调为signin-oidc
-                options.Scope.Add("profile");
-                options.Scope.Add("email");
-                options.Scope.Add("roles");
-                options.Scope.Add("dpcontrolapiscope");
-
-                options.TokenValidationParameters.NameClaimType = "name";
-                options.TokenValidationParameters.RoleClaimType = "role";
-            });
-            #endregion
 
             app.UseMvc(routes =>
             {

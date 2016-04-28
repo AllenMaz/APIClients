@@ -11,7 +11,7 @@ namespace Constants
     {
         #region Authorization Server
         public const string ASBaseAddress = "http://localhost:23194"; //AS BaseAddress
-        //public const string ASBaseAddress = "http://development.chinacloudsites.cn/";
+        //public const string ASBaseAddress = "http://developer.chinacloudsites.cn/";
 
         public const string AuthorizeEndpoint = ASBaseAddress + "/connect/authorize";
         public const string LogoutEndpoint = ASBaseAddress + "/connect/endsession";
@@ -28,7 +28,8 @@ namespace Constants
         //public const string CallBackUrl = "http://mvcclient.chinacloudsites.cn/Home/CallBack";
         #endregion
         #region Resource Server
-        public const string RSBaseAddress = "http://localhost:2727/v1/";
+        //public const string RSBaseAddress = "http://localhost:37936/v1/";
+        public const string RSBaseAddress = "http://dpcontrolapi.chinacloudsites.cn/v1";
         public const string CustomersAPI = "Customers";
         #endregion
     }
